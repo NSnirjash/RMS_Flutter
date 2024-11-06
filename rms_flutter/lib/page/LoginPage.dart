@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:rms_flutter/page/AllFoodViewPage.dart';
 import 'package:rms_flutter/page/HomePage.dart';
 import 'package:rms_flutter/page/RegistrationPage.dart';
 
@@ -50,7 +51,7 @@ class LoginPage extends StatelessWidget {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => AllFoodViewPage()),
           );
         } catch (e) {
           print('Error parsing token: $e');

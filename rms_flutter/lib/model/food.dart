@@ -1,7 +1,4 @@
 
-
-
-
 class Food {
   int? id;
   String? name;
