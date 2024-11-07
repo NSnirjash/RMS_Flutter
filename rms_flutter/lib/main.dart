@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rms_flutter/page/AllFoodViewPage.dart';
 import 'package:rms_flutter/page/loginpage.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(primarySwatch: Colors.indigo),
       color: Colors.red,
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: AllFoodViewPage(),
     );
   }
 }
