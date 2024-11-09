@@ -1,9 +1,18 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rms_flutter/model/food.dart';
 import 'package:http/http.dart' as http;
+import 'package:rms_flutter/service/AuthService.dart';
 
 class FoodService{
+
+  final Dio _dio = Dio();
+
+  final AuthService authService = AuthService();
+
+
   final String apiUrl = "http://localhost:8090/api/food/view";
 
   Future<List<Food>> fetchFoods() async {
@@ -15,4 +24,42 @@ class FoodService{
       throw Exception("Failed to load foods");
     }
   }
+
+
+  Future<Food?> createHotel(Food food, XFile? image) async {
+    final formData = FormData();
+
+    formData.fields.add(MapEntry('food', jsonEncode(food.toJson())));
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      formData.files.add(MapEntry('image', MultipartFile.fromBytes(
+        bytes,
+        filename: image.name,
+      )));
+    }
+
+    final token = await authService.getToken();
+    final headers = {'Authorization': 'Bearer $token'};
+
+    try {
+      final response = await _dio.post(
+        '${apiUrl}save',
+        data: formData,
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data as Map<String, dynamic>;
+        return Food.fromJson(data); // Parse response data to Hotel object
+      } else {
+        print('Error creating hotel: ${response.statusCode}');
+        return null;
+      }
+    } on DioError catch (e) {
+      print('Error creating hotel: ${e.message}');
+      return null;
+    }
+  }
+
 }
