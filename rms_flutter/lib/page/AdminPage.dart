@@ -72,6 +72,22 @@ class AdminPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
 
+            ElevatedButton.icon(
+              icon: Icon(Icons.table_restaurant),
+              label: Text('Add Table'),
+              onPressed: () {
+                // Implement logout functionality or navigate back to login
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddFoodPage()),
+                ); // Example logout: navigate back to login
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+              ),
+            ),
+            SizedBox(height: 10),
+
 
             ElevatedButton.icon(
               icon: Icon(Icons.settings),

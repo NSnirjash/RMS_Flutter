@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
       else if (role == 'USER') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AllFoodViewPage()),
+          MaterialPageRoute(builder: (context) => Userpage()),
         );
       } else {
         print('Unknown role: $role');

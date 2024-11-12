@@ -14,6 +14,7 @@ class FoodService{
 
 
   final String apiUrl = "http://localhost:8090/api/food/view";
+  final String apiUrl2 = "http://localhost:8090/api/food/";
 
   Future<List<Food>> fetchFoods() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -26,7 +27,7 @@ class FoodService{
   }
 
 
-  Future<Food?> createHotel(Food food, XFile? image) async {
+  Future<Food?> createFood(Food food, XFile? image) async {
     final formData = FormData();
 
     formData.fields.add(MapEntry('food', jsonEncode(food.toJson())));
@@ -44,7 +45,7 @@ class FoodService{
 
     try {
       final response = await _dio.post(
-        '${apiUrl}save',
+        '${apiUrl2}save',
         data: formData,
         options: Options(headers: headers),
       );
@@ -53,11 +54,11 @@ class FoodService{
         final data = response.data as Map<String, dynamic>;
         return Food.fromJson(data); // Parse response data to Hotel object
       } else {
-        print('Error creating hotel: ${response.statusCode}');
+        print('Error creating food: ${response.statusCode}');
         return null;
       }
     } on DioError catch (e) {
-      print('Error creating hotel: ${e.message}');
+      print('Error creating food: ${e.message}');
       return null;
     }
   }

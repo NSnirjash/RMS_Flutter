@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rms_flutter/service/food_service.dart';
+import 'package:rms_flutter/service/FoodService.dart';
 import '../model/food.dart';
 
 class AllFoodViewPage extends StatefulWidget {
