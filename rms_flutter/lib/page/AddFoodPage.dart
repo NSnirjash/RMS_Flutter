@@ -1,9 +1,16 @@
 
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:rms_flutter/model/food.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 
 class AddFoodPage extends StatefulWidget {
   const AddFoodPage({super.key});
@@ -16,60 +23,86 @@ class _AddFoodPageState extends State<AddFoodPage> {
 
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
-  XFile? _imageFile; // Use XFile for consistency with image_picker
-  Uint8List? _imageData; // To hold image data as Uint8List
+  XFile? selectedImage; // Use XFile for consistency with image_picker
+  Uint8List? webImage; // To hold image data as Uint8List
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   bool _isAvailable = true;
 
-  Future<void> _pickImage() async{
-    try{
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if(pickedFile != null){
-        final bytes = await pickedFile.readAsBytes();
+  Future<void> _pickImage() async {
+    if (kIsWeb) {
+      // For Web: Use image_picker_web to pick image and store as bytes
+      var pickedImage = await ImagePickerWeb.getImageAsBytes();
+      if (pickedImage != null) {
         setState(() {
-          _imageFile = pickedFile;
-          _imageData = bytes;
+          webImage = pickedImage;
         });
       }
-    }catch(e){
-      print('Error picking image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error Picking Image ${e.toString()}')),
-      );
+    } else {
+      // For Mobile: Use image_picker to pick image
+      final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        setState(() {
+          selectedImage = pickedImage;
+        });
+      }
     }
   }
 
   Future<void> _saveFood() async {
-    if (_formKey.currentState!.validate() && _imageFile != null) {
-      final food = Food(
-        id: 0,
-        name: _nameController.text,
-        price: double.parse(_priceController.text),
-        category: _categoryController.text,
-        available: _isAvailable,
-        image: '', // Will be handled by backend
+    if (_formKey.currentState!.validate() && (selectedImage != null || webImage != null)) {
+      // Prepare food data
+      final food = {
+        'name': _nameController.text,
+        'price': _priceController.text,
+        'category': _categoryController.text,
+        'available': _isAvailable,
+      };
+
+      var uri = Uri.parse('http://localhost:8090/api/food/save');
+      var request = http.MultipartRequest('POST', uri);
+
+      // Add food data as JSON
+      request.files.add(
+        http.MultipartFile.fromString(
+          'food',
+          jsonEncode(food),
+          contentType: MediaType('application', 'json'),
+        ),
       );
 
-      try {
-        await FoodService().createFood(food, _imageFile!);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Food added successfully!')),
-        );
+      if (kIsWeb && webImage != null) {
+        request.files.add(http.MultipartFile.fromBytes(
+          'image',
+          webImage!,
+          filename: 'upload.jpg',
+          contentType: MediaType('image', 'jpeg'),
+        ));
+      } else if (selectedImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'image',
+          selectedImage!.path,
+        ));
+      }
 
-        // Clear form fields and reset image
-        _nameController.clear();
-        _priceController.clear();
-        _categoryController.clear();
-        _imageFile = null;
-        _imageData = null;
-        setState(() {});
+      try {
+        var response = await request.send();
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Food added successfully!')),
+          );
+          _clearForm();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to add food. Status code: ${response.statusCode}')),
+          );
+        }
       } catch (e) {
-        print(e);
+        print('Error occurred while submitting: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding food: ${e.toString()}')),
+          SnackBar(content: Text('Error occurred while adding food.')),
         );
       }
     } else {
@@ -77,6 +110,18 @@ class _AddFoodPageState extends State<AddFoodPage> {
         SnackBar(content: Text('Please complete the form and upload an image.')),
       );
     }
+  }
+
+  void _clearForm() {
+    _nameController.clear();
+    _priceController.clear();
+    _categoryController.clear();
+
+    setState(() {
+      selectedImage = null;
+      webImage = null;
+      _isAvailable = true;
+    });
   }
 
   @override
@@ -119,6 +164,7 @@ class _AddFoodPageState extends State<AddFoodPage> {
                         value == null || value.isEmpty ? 'Enter food name' : null,
                       ),
                       SizedBox(height: 16),
+
                       TextFormField(
                         controller: _priceController,
                         keyboardType: TextInputType.number,
@@ -136,6 +182,7 @@ class _AddFoodPageState extends State<AddFoodPage> {
                         value == null || value.isEmpty ? 'Enter price' : null,
                       ),
                       SizedBox(height: 16),
+
                       DropdownButtonFormField<String>(
                         value: _categoryController.text.isEmpty ? null : _categoryController.text,
                         items: ['Fast Food', 'Main Course', 'Dessert', 'Drinks']
@@ -178,6 +225,7 @@ class _AddFoodPageState extends State<AddFoodPage> {
                 ),
               ),
               SizedBox(height: 16),
+
               OutlinedButton.icon(
                 icon: Icon(Icons.image, color: Colors.teal),
                 label: Text('Upload Image', style: TextStyle(color: Colors.teal)),
@@ -187,14 +235,27 @@ class _AddFoodPageState extends State<AddFoodPage> {
                 ),
                 onPressed: _pickImage,
               ),
-              if (_imageData != null)
+              if (kIsWeb && webImage != null)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.memory(_imageData!, height: 150, fit: BoxFit.cover),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.memory(
+                    webImage!,
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              else if (!kIsWeb && selectedImage != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.file(
+                    File(selectedImage!.path),
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
                   ),
                 ),
+
               SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,

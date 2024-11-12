@@ -95,8 +95,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: Padding(
-        padding: EdgeInsets.all(40),
+        padding: const EdgeInsets.all(40),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -105,30 +106,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
               children: [
                 Text(
                   "Registration Form",
-                  style: TextStyle(fontSize: 40, color: Colors.blue),
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue[800],
+                  ),
                 ),
                 const SizedBox(height: 40),
                 TextFormField(
                   controller: name,
                   decoration: InputDecoration(
-                    label: Text("Full Name"),
-                    border: UnderlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
+                    labelText: "Full Name",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person, color: Colors.blue),
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
                     }
-                    return null; // No error
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: email,
                   decoration: InputDecoration(
-                    label: Text("Email"),
-                    border: UnderlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
+                    labelText: "Email",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.email, color: Colors.blue),
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -137,7 +148,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
-                    return null; // No error
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
@@ -145,15 +156,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   controller: password,
                   obscureText: true,
                   decoration: InputDecoration(
-                    label: Text("Password"),
-                    border: UnderlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock, color: Colors.blue),
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a password';
                     }
-                    return null; // No error
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
@@ -161,9 +175,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   controller: confirmPassword,
                   obscureText: true,
                   decoration: InputDecoration(
-                    label: Text("Rewrite Password"),
-                    border: UnderlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
+                    labelText: "Rewrite Password",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock, color: Colors.blue),
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -172,117 +189,108 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (value != password.text) {
                       return 'Passwords do not match';
                     }
-                    return null; // No error
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: phone,
                   decoration: InputDecoration(
-                    label: Text("Contact Number"),
-                    border: UnderlineInputBorder(),
-                    prefixIcon: Icon(Icons.phone),
+                    labelText: "Contact Number",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.phone, color: Colors.blue),
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your contact number';
                     }
-                    return null; // No error
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: address,
                   decoration: InputDecoration(
-                    label: Text("Permanent Address"),
-                    border: UnderlineInputBorder(),
-                    prefixIcon: Icon(Icons.home),
+                    labelText: "Permanent Address",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.home, color: Colors.blue),
+                    labelStyle: TextStyle(color: Colors.blue[700]),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your address';
                     }
-                    return null; // No error
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text('Role:'),
+                    Text(
+                      'Role:',
+                      style: TextStyle(color: Colors.blue[700]),
+                    ),
                     Expanded(
-                      child: Row(
-                        children: [
-                          Radio<String>(
-                            value: 'ADMIN',
-                            groupValue: selectedRole,
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectedRole = value;
-                              });
-                            },
-                          ),
-                          Text('Admin'),
-                        ],
+                      child: RadioListTile<String>(
+                        title: Text('Admin'),
+                        value: 'ADMIN',
+                        groupValue: selectedRole,
+                        onChanged: (value) {
+                          setState(() => selectedRole = value);
+                        },
                       ),
                     ),
                     Expanded(
-                      child: Row(
-                        children: [
-                          Radio<String>(
-                            value: 'WAITER',
-                            groupValue: selectedRole,
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectedRole = value;
-                              });
-                            },
-                          ),
-                          Text('Waiter'),
-                        ],
+                      child: RadioListTile<String>(
+                        title: Text('Waiter'),
+                        value: 'WAITER',
+                        groupValue: selectedRole,
+                        onChanged: (value) {
+                          setState(() => selectedRole = value);
+                        },
                       ),
                     ),
                     Expanded(
-                      child: Row(
-                        children: [
-                          Radio<String>(
-                            value: 'USER',
-                            groupValue: selectedRole,
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectedRole = value;
-                              });
-                            },
-                          ),
-                          Text('User'),
-                        ],
+                      child: RadioListTile<String>(
+                        title: Text('User'),
+                        value: 'USER',
+                        groupValue: selectedRole,
+                        onChanged: (value) {
+                          setState(() => selectedRole = value);
+                        },
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 isLoading
-                    ? CircularProgressIndicator()
+                    ? CircularProgressIndicator(color: Colors.blue[800])
                     : ElevatedButton(
                   onPressed: _register,
                   child: Text(
                     "Register",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: 14),
+                    style: TextStyle(fontSize: 18),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[800],
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    Navigator.pop(context);
                   },
                   child: Text(
-                    'Login',
+                    'Already have an account? Login',
                     style: TextStyle(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,

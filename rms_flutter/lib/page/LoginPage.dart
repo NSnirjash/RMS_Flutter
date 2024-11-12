@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
-import 'package:rms_flutter/page/AllFoodViewPage.dart';
-import 'package:rms_flutter/page/HomePage.dart';
 import 'package:rms_flutter/page/RegistrationPage.dart';
 import 'package:rms_flutter/page/UserPage.dart';
-import 'package:rms_flutter/page/WaiterPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 
 class LoginPage extends StatelessWidget {
