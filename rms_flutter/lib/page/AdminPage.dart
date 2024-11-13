@@ -1,9 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/page/AddFoodPage.dart';
 import 'package:rms_flutter/page/AddTablePage.dart';
 import 'package:rms_flutter/page/AllFoodViewPage.dart';
+import 'package:rms_flutter/page/AllTableBookingViewPage.dart';
 import 'package:rms_flutter/page/AllTableViewPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
 
@@ -49,13 +48,6 @@ class AdminPage extends StatelessWidget {
                   ),
                   _buildDashboardCard(
                     context,
-                    icon: Icons.hotel,
-                    label: 'Manage Hotels',
-                    color: Colors.lightBlueAccent,
-                    onTap: () => print("Manage Hotels clicked"),
-                  ),
-                  _buildDashboardCard(
-                    context,
                     icon: Icons.add,
                     label: 'Add Food',
                     color: Colors.greenAccent,
@@ -96,6 +88,16 @@ class AdminPage extends StatelessWidget {
                   ),
                   _buildDashboardCard(
                     context,
+                    icon: Icons.table_restaurant,
+                    label: 'View Booking Table',
+                    color: Colors.amberAccent,
+                    onTap: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => AllTableBookingViewPage()),
+                    ),
+                  ),
+                  _buildDashboardCard(
+                    context,
                     icon: Icons.settings,
                     label: 'Settings',
                     color: Colors.blueGrey,
@@ -132,39 +134,44 @@ class AdminPage extends StatelessWidget {
         required String label,
         required Color color,
         required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        elevation: 8,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+    return Expanded( // Ensures that the card takes available space
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: color.withOpacity(0.6), width: 1),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: color,
-                child: Icon(icon, size: 30, color: Colors.white),
-              ),
-              SizedBox(height: 10),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: color,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: color.withOpacity(0.6), width: 1),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min, // Allows the Column to take minimum height
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: color,
+                  child: Icon(icon, size: 30, color: Colors.white),
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                SizedBox(height: 10),
+                Flexible( // Ensures text doesn't overflow vertically
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: color,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

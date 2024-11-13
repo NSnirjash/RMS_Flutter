@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rms_flutter/page/AllFoodViewPage.dart';
 import 'package:rms_flutter/page/loginpage.dart';
 
 void main() {

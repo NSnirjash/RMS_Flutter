@@ -12,7 +12,7 @@ class Userpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Dashboard'),
+        title: Text('User Dashboard'),
         automaticallyImplyLeading: false, // Hides the back button
         backgroundColor: Colors.blueAccent,
       ),
@@ -22,7 +22,7 @@ class Userpage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Welcome, Admin!',
+              'Welcome, User!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -31,32 +31,6 @@ class Userpage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
-            ElevatedButton.icon(
-              icon: Icon(Icons.people),
-              label: Text('View Users'),
-              onPressed: () {
-                // Navigate to users page or call an API to fetch users
-                print("View Users clicked");
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-              ),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton.icon(
-              icon: Icon(Icons.hotel),
-              label: Text('Manage Hotels'),
-              onPressed: () {
-                // Navigate to manage hotels page or call an API to manage hotels
-                print("Manage Hotels clicked");
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-              ),
-            ),
-            SizedBox(height: 10),
-
-
             ElevatedButton.icon(
               icon: Icon(Icons.fastfood),
               label: Text('View Food'),
