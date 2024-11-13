@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:rms_flutter/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -108,4 +109,35 @@ class AuthService{
   Future<bool> isUser() async {
     return await hasRole(['USER']);
   }
+
+  // Future<Map<String, dynamic>?> getCurrentUser() async {
+  //   String? token = await getToken();
+  //   if (token != null) {
+  //     Map<String, dynamic> payload = Jwt.parseJwt(token);
+  //
+  //     // Extract user information from the payload
+  //     return {
+  //       'id': payload['id'],
+  //       'name': payload['name'],
+  //       'email': payload['email'],
+  //       'role': payload['role'],
+  //     };
+  //   }
+  //   return null;
+  // }
+
+  Future<User?> getCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('authToken');
+
+    if (token != null) {
+      Map<String, dynamic> payload = Jwt.parseJwt(token);
+
+      // Convert payload to a User object
+      return User.fromJson(payload);
+    }
+
+    return User(); // Return null if no user is logged in
+  }
+
 }

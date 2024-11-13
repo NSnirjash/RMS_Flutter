@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/page/AllFoodViewPage.dart';
 import 'package:rms_flutter/page/AllTableViewPage.dart';
+import 'package:rms_flutter/page/CreateTableBookingPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
 
 class Userpage extends StatelessWidget {
@@ -54,7 +55,7 @@ class Userpage extends StatelessWidget {
                 // Implement logout functionality or navigate back to login
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => AllTableViewPage()),
+                  MaterialPageRoute(builder: (context) => CreateTableBookingPage()),
                 ); // Example logout: navigate back to login
               },
               style: ElevatedButton.styleFrom(

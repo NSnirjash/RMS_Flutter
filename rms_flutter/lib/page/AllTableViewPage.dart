@@ -68,10 +68,10 @@ class _AllTableViewPageState extends State<AllTableViewPage> {
     switch (status) {
       case 'AVAILABLE':
         return Colors.green;
-      case 'Occupied':
-        return Colors.red;
-      case 'BOOKED':
+      case 'PENDING':
         return Colors.orange;
+      case 'BOOKED':
+        return Colors.red;
       default:
         return Colors.grey;
     }

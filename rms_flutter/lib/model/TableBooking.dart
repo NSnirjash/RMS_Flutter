@@ -4,8 +4,8 @@ import 'package:rms_flutter/model/user.dart';
 class TableBooking {
   int? id;
   String? status;
-  String? approvalDate;
-  String? bookingDate;
+  DateTime? approvalDate;
+  DateTime? bookingDate;
   User? bookedBy;
   TableModel? tables;
   User? approvedBy;
@@ -22,8 +22,12 @@ class TableBooking {
   TableBooking.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
-    approvalDate = json['approvalDate'];
-    bookingDate = json['bookingDate'];
+    approvalDate = json['approvalDate'] != null
+        ? DateTime.parse(json['approvalDate'])
+        : null;
+    bookingDate = json['bookingDate'] != null
+        ? DateTime.parse(json['bookingDate'])
+        : null;
     bookedBy = json['bookedBy'] != null
         ? new User.fromJson(json['bookedBy'])
         : null;
@@ -38,8 +42,8 @@ class TableBooking {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['status'] = this.status;
-    data['approvalDate'] = this.approvalDate;
-    data['bookingDate'] = this.bookingDate;
+    data['approvalDate'] = approvalDate?.toIso8601String(); // Serialize as String
+    data['bookingDate'] = bookingDate?.toIso8601String(); // Serialize as String
     if (this.bookedBy != null) {
       data['bookedBy'] = this.bookedBy!.toJson();
     }

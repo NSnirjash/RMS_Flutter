@@ -19,7 +19,7 @@ class TableBookingService {
 
   // Fetch all tables
   Future<List<TableModel>> getAllTables() async {
-    final response = await http.get(Uri.parse('$_baseUrl/tables/view'));
+    final response = await http.get(Uri.parse('$_baseUrl/table/view'));
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => TableModel.fromJson(data)).toList();
