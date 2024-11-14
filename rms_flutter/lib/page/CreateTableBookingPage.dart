@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rms_flutter/model/TableBooking.dart';
 import 'package:rms_flutter/model/table.dart';
 import 'package:rms_flutter/model/user.dart';
+import 'package:rms_flutter/page/UserPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 import 'package:rms_flutter/service/TableBookingService.dart';
 
@@ -64,6 +65,15 @@ class _CreateTableBookingPageState extends State<CreateTableBookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Userpage()),
+            );
+          },
+        ),
         title: Center(
           child: Text(
             'Create Table Booking',

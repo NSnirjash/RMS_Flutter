@@ -8,6 +8,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:rms_flutter/model/food.dart';
+import 'package:rms_flutter/page/AdminPage.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
@@ -128,153 +129,179 @@ class _AddFoodPageState extends State<AddFoodPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Food'),
-        backgroundColor: Colors.teal,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminPage()),
+            );
+          },
+        ),
+        title: Text(
+          'Add New Food',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.teal.shade600,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                color: Colors.teal[50], // Light teal background for the card
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: 'Food Name',
-                          labelStyle: TextStyle(color: Colors.teal),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal, width: 2),
-                          ),
-                        ),
-                        validator: (value) =>
-                        value == null || value.isEmpty ? 'Enter food name' : null,
-                      ),
-                      SizedBox(height: 16),
-
-                      TextFormField(
-                        controller: _priceController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Price',
-                          labelStyle: TextStyle(color: Colors.teal),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal, width: 2),
-                          ),
-                        ),
-                        validator: (value) =>
-                        value == null || value.isEmpty ? 'Enter price' : null,
-                      ),
-                      SizedBox(height: 16),
-
-                      DropdownButtonFormField<String>(
-                        value: _categoryController.text.isEmpty ? null : _categoryController.text,
-                        items: ['Fast Food', 'Main Course', 'Dessert', 'Drinks']
-                            .map((category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _categoryController.text = value!;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Category',
-                          labelStyle: TextStyle(color: Colors.teal),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal, width: 2),
-                          ),
-                        ),
-                        validator: (value) =>
-                        value == null || value.isEmpty ? 'Select a category' : null,
-                      ),
-                      SizedBox(height: 16),
-                      SwitchListTile(
-                        title: Text(
-                          'Available',
-                          style: TextStyle(color: Colors.teal[800]),
-                        ),
-                        value: _isAvailable,
-                        onChanged: (value) => setState(() => _isAvailable = value),
-                        contentPadding: EdgeInsets.zero,
-                        activeColor: Colors.teal,
-                      ),
-                    ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal.shade50, Colors.teal.shade200],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-              ),
-              SizedBox(height: 16),
+                  color: Colors.teal.shade100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Food Name',
+                            labelStyle: TextStyle(color: Colors.teal.shade700),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal.shade700, width: 2),
+                            ),
+                          ),
+                          validator: (value) =>
+                          value == null || value.isEmpty ? 'Enter food name' : null,
+                        ),
+                        SizedBox(height: 16),
 
-              OutlinedButton.icon(
-                icon: Icon(Icons.image, color: Colors.teal),
-                label: Text('Upload Image', style: TextStyle(color: Colors.teal)),
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  side: BorderSide(color: Colors.teal, width: 1.5),
-                ),
-                onPressed: _pickImage,
-              ),
-              if (kIsWeb && webImage != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.memory(
-                    webImage!,
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              else if (!kIsWeb && selectedImage != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.file(
-                    File(selectedImage!.path),
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                        TextFormField(
+                          controller: _priceController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Price',
+                            labelStyle: TextStyle(color: Colors.teal.shade700),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal.shade700, width: 2),
+                            ),
+                          ),
+                          validator: (value) =>
+                          value == null || value.isEmpty ? 'Enter price' : null,
+                        ),
+                        SizedBox(height: 16),
 
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _saveFood,
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: Colors.teal, // Button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                        DropdownButtonFormField<String>(
+                          value: _categoryController.text.isEmpty ? null : _categoryController.text,
+                          items: ['Fast Food', 'Main Course', 'Dessert', 'Drinks']
+                              .map((category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category),
+                          ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _categoryController.text = value!;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Category',
+                            labelStyle: TextStyle(color: Colors.teal.shade700),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal.shade700, width: 2),
+                            ),
+                          ),
+                          validator: (value) =>
+                          value == null || value.isEmpty ? 'Select a category' : null,
+                        ),
+                        SizedBox(height: 16),
+                        SwitchListTile(
+                          title: Text(
+                            'Available',
+                            style: TextStyle(color: Colors.teal.shade700),
+                          ),
+                          value: _isAvailable,
+                          onChanged: (value) => setState(() => _isAvailable = value),
+                          contentPadding: EdgeInsets.zero,
+                          activeColor: Colors.teal.shade700,
+                        ),
+                      ],
                     ),
                   ),
-                  child: Text(
-                    'Save Food',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                SizedBox(height: 16),
+
+                OutlinedButton.icon(
+                  icon: Icon(Icons.image, color: Colors.teal.shade600),
+                  label: Text('Upload Image', style: TextStyle(color: Colors.teal.shade600)),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    side: BorderSide(color: Colors.teal.shade600, width: 1.5),
+                  ),
+                  onPressed: _pickImage,
+                ),
+                if (kIsWeb && webImage != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.memory(
+                      webImage!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                else if (!kIsWeb && selectedImage != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.file(
+                      File(selectedImage!.path),
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _saveFood,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      backgroundColor: Colors.teal.shade600,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Save Food',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

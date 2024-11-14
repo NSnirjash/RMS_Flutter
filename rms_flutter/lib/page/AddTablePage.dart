@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/model/table.dart';
+import 'package:rms_flutter/page/AdminPage.dart';
 import 'package:rms_flutter/service/TableService.dart';
 
 class AddTablePage extends StatefulWidget {
@@ -49,7 +50,17 @@ class _AddTablePageState extends State<AddTablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminPage()),
+            );
+          },
+        ),
         title: Text('Add New Table', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
         backgroundColor: Colors.teal,
       ),
       body: Padding(

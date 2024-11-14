@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rms_flutter/page/AdminPage.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import '../model/food.dart';
 
@@ -22,6 +23,15 @@ class _AllFoodViewPageState extends State<AllFoodViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminPage()),
+            );
+          },
+        ),
         title: Text('All Food Items',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),

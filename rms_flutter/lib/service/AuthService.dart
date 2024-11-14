@@ -19,6 +19,7 @@ class AuthService{
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       String token = data['token'];
+      final user = data['user'];
 
       // Decode token to get role
       Map<String, dynamic> payload = Jwt.parseJwt(token);
@@ -28,6 +29,7 @@ class AuthService{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('authToken', token);
       await prefs.setString('userRole', role);
+      await prefs.setString('user', jsonEncode(user));
 
       return true;
     } else {
@@ -110,34 +112,15 @@ class AuthService{
     return await hasRole(['USER']);
   }
 
-  // Future<Map<String, dynamic>?> getCurrentUser() async {
-  //   String? token = await getToken();
-  //   if (token != null) {
-  //     Map<String, dynamic> payload = Jwt.parseJwt(token);
-  //
-  //     // Extract user information from the payload
-  //     return {
-  //       'id': payload['id'],
-  //       'name': payload['name'],
-  //       'email': payload['email'],
-  //       'role': payload['role'],
-  //     };
-  //   }
-  //   return null;
-  // }
-
   Future<User?> getCurrentUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
-
-    if (token != null) {
-      Map<String, dynamic> payload = Jwt.parseJwt(token);
-
-      // Convert payload to a User object
-      return User.fromJson(payload);
+    final sp = await SharedPreferences.getInstance();
+    final userJson = sp.getString('user');
+    if (userJson != null) {
+      User user = User.fromJson(jsonDecode(userJson));
+      return user;
+    } else {
+      return null;
     }
-
-    return User(); // Return null if no user is logged in
   }
 
 }

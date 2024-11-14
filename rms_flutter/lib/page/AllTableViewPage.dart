@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rms_flutter/page/AdminPage.dart';
 import 'package:rms_flutter/service/TableService.dart';
 import 'package:rms_flutter/model/table.dart';
 
@@ -81,7 +82,17 @@ class _AllTableViewPageState extends State<AllTableViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Tables', style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminPage()),
+            );
+          },
+        ),
+        title: Text('All Tables', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        centerTitle: true,
         backgroundColor: Colors.teal,
         actions: [
           IconButton(

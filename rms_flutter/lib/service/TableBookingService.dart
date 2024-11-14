@@ -70,7 +70,7 @@ class TableBookingService {
       headers: headers,
       body: json.encode(booking.toJson()),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return TableBooking.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to create booking');
