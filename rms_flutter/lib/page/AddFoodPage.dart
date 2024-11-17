@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:rms_flutter/model/food.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/FoodListPage.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
@@ -134,7 +135,7 @@ class _AddFoodPageState extends State<AddFoodPage> {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AdminPage()),
+                MaterialPageRoute(builder: (context) => FoodListPage()),
             );
           },
         ),

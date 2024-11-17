@@ -4,6 +4,7 @@ import 'package:rms_flutter/page/AddTablePage.dart';
 import 'package:rms_flutter/page/AllFoodViewPage.dart';
 import 'package:rms_flutter/page/AllTableBookingViewPage.dart';
 import 'package:rms_flutter/page/AllTableViewPage.dart';
+import 'package:rms_flutter/page/FoodListPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 
@@ -83,39 +84,19 @@ class _AdminPageState extends State<AdminPage> {
                     ),
                     _buildDashboardCard(
                       context,
-                      icon: Icons.add,
-                      label: 'Add Food',
-                      color: Colors.green,
-                      onTap: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddFoodPage()),
-                      ),
-                    ),
-                    _buildDashboardCard(
-                      context,
                       icon: Icons.fastfood,
-                      label: 'Delete or Update Food',
-                      color: Colors.orange,
-                      onTap: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AllFoodViewPage()),
-                      ),
-                    ),
-                    _buildDashboardCard(
-                      context,
-                      icon: Icons.add,
-                      label: 'Add Table',
+                      label: 'Food List',
                       color: Colors.pink,
                       onTap: () => Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => AddTablePage()),
+                        MaterialPageRoute(
+                            builder: (context) => FoodListPage()),
                       ),
                     ),
                     _buildDashboardCard(
                       context,
                       icon: Icons.table_restaurant,
-                      label: 'Delete or Update Table',
+                      label: 'Table List',
                       color: Colors.amber,
                       onTap: () => Navigator.pushReplacement(
                         context,

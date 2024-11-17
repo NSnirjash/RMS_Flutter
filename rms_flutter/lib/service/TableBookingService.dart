@@ -129,6 +129,20 @@ class TableBookingService {
     }
   }
 
+  // Free a table
+  Future<TableBooking> freeTable(int bookingId, int adminId) async {
+    final headers = await _getAuthHeaders();
+    final response = await http.put(
+      Uri.parse('$_baseUrl/approvals/free/$bookingId?adminId=$adminId'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return TableBooking.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to free the table');
+    }
+  }
+
   // Fetch all pending bookings
   Future<List<TableBooking>> getPendingBookings() async {
     final headers = await _getAuthHeaders();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/model/table.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/AllTableViewPage.dart';
 import 'package:rms_flutter/service/TableService.dart';
 
 class AddTablePage extends StatefulWidget {
@@ -55,7 +56,7 @@ class _AddTablePageState extends State<AddTablePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminPage()),
+              MaterialPageRoute(builder: (context) => AllTableViewPage()),
             );
           },
         ),
