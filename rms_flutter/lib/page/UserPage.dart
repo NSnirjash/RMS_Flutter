@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/page/AllFoodViewPage.dart';
 import 'package:rms_flutter/page/AllTableViewPage.dart';
+import 'package:rms_flutter/page/CreateOrderPage.dart';
 import 'package:rms_flutter/page/CreateTableBookingPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
 
@@ -40,6 +41,22 @@ class Userpage extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => AllFoodViewPage()),
+                ); // Example logout: navigate back to login
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+              ),
+            ),
+            SizedBox(height: 10),
+
+            ElevatedButton.icon(
+              icon: Icon(Icons.fastfood),
+              label: Text('Order Food'),
+              onPressed: () {
+                // Implement logout functionality or navigate back to login
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateOrderPage()),
                 ); // Example logout: navigate back to login
               },
               style: ElevatedButton.styleFrom(

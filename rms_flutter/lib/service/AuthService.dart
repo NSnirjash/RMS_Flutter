@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 class AuthService{
   final String baseUrl = 'http://localhost:8090';
 
-
   Future<bool> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/login');
     final headers = {'Content-Type': 'application/json'};
@@ -123,4 +122,48 @@ class AuthService{
     }
   }
 
+  Future<Map<String, String>> _getAuthHeaders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('authToken');
+    if (token == null) {
+      throw Exception("Authorization token not found.");
+    }
+    return {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+  }
+
+  // Fetch all users
+  Future<List<User>> getAllUsers() async {
+    final url = Uri.parse('$baseUrl/getAllUsers');
+    final headers = await _getAuthHeaders();
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = jsonDecode(response.body);
+      return jsonData.map((userJson) => User.fromJson(userJson)).toList();
+    } else {
+      throw Exception(
+          'Failed to fetch users. Error ${response.statusCode}: ${response.body}');
+    }
+  }
+
+  // Fetch all waiters
+  Future<List<User>> getAllWaiters() async {
+    final url = Uri.parse('$baseUrl/getAllWaiters');
+    final headers = await _getAuthHeaders();
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = jsonDecode(response.body);
+      return jsonData.map((userJson) => User.fromJson(userJson)).toList();
+    } else {
+      throw Exception(
+          'Failed to fetch waiters. Error ${response.statusCode}: ${response.body}');
+    }
+  }
 }
+

@@ -6,6 +6,7 @@ import 'package:rms_flutter/page/AllTableBookingViewPage.dart';
 import 'package:rms_flutter/page/AllTableViewPage.dart';
 import 'package:rms_flutter/page/FoodListPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
+import 'package:rms_flutter/page/OrderListPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 
 class AdminPage extends StatefulWidget {
@@ -91,6 +92,17 @@ class _AdminPageState extends State<AdminPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => FoodListPage()),
+                      ),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.fastfood,
+                      label: 'Order List',
+                      color: Colors.red,
+                      onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => OrderListPage()),
                       ),
                     ),
                     _buildDashboardCard(
