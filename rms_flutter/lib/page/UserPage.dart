@@ -6,9 +6,10 @@ import 'package:rms_flutter/page/AllTableViewPage.dart';
 import 'package:rms_flutter/page/CreateOrderPage.dart';
 import 'package:rms_flutter/page/CreateTableBookingPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
+import 'package:rms_flutter/page/OrderListPage.dart';
 
-class Userpage extends StatelessWidget {
-  const Userpage({super.key});
+class UserPage extends StatelessWidget {
+  const UserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,22 @@ class Userpage extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => CreateOrderPage()),
+                ); // Example logout: navigate back to login
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+              ),
+            ),
+            SizedBox(height: 10),
+
+            ElevatedButton.icon(
+              icon: Icon(Icons.fastfood),
+              label: Text('Order List'),
+              onPressed: () {
+                // Implement logout functionality or navigate back to login
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderListPage()),
                 ); // Example logout: navigate back to login
               },
               style: ElevatedButton.styleFrom(

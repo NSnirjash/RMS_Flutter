@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/UserPage.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import '../model/food.dart';
 
@@ -28,7 +29,7 @@ class _AllFoodViewPageState extends State<AllFoodViewPage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminPage()),
+              MaterialPageRoute(builder: (context) => UserPage()),
             );
           },
         ),

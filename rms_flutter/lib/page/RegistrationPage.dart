@@ -21,7 +21,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool isLoading = false;
 
   void _register() async {
-    // Registration code here
+
+    if (_formKey.currentState!.validate()) {
+      String uName = name.text;
+      String uEmail = email.text;
+      String uPassword = password.text;
+      String uPhone = phone.text;
+      String uAddress = address.text;
+      String uRole = selectedRole ?? 'Other';
+
+
+      // Send data to the server
+      final response = await _sendDataToBackend(uName, uEmail, uPassword, uPhone, uAddress, uRole);
+
+      if (response.statusCode == 201 || response.statusCode == 200  ) {
+        // Registration successful
+        print('Registration successful!');
+      } else if (response.statusCode == 409) {
+        // User already exists
+        print('User already exists!');
+      } else {
+        print('Registration failed with status: ${response.statusCode}');
+      }
+    }
   }
 
   Future<http.Response> _sendDataToBackend(
