@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/CreateOrderPage.dart';
 import 'package:rms_flutter/page/UserPage.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import '../model/food.dart';
@@ -134,7 +135,13 @@ class _AllFoodViewPageState extends State<AllFoodViewPage> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    print('Order this food item: ${food.name}');
+                                    // Navigate to the CreateOrderPage and pass the food name
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CreateOrderPage(),
+                                      ),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.deepOrangeAccent,
