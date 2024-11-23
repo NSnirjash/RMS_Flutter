@@ -134,10 +134,13 @@ class _UserPageState extends State<UserPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                ),
+                onPressed: () async {
+                  await AuthService().logout();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
                   padding: EdgeInsets.symmetric(vertical: 16),
@@ -148,9 +151,10 @@ class _UserPageState extends State<UserPage> {
                 child: Text(
                   'Logout',
                   style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

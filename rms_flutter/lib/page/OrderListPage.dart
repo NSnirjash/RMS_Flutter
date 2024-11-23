@@ -44,7 +44,8 @@ class _OrderListPageState extends State<OrderListPage> {
     if (_currentUser != null) {
       final orders = await _orderService.getAllOrders(_currentUser!.id!);
       setState(() {
-        _orderList = orders;
+        // Sort orders by ID in descending order (new to old)
+        _orderList = orders..sort((a, b) => b.id!.compareTo(a.id!));
       });
     }
   }
@@ -134,7 +135,7 @@ class _OrderListPageState extends State<OrderListPage> {
             }
           },
         ),
-        title: Text('Your Orders',
+        title: Text('Food Order List',
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
