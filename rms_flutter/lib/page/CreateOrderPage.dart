@@ -3,6 +3,7 @@ import 'package:rms_flutter/model/Order.dart';
 import 'package:rms_flutter/model/OrderItem.dart';
 import 'package:rms_flutter/model/food.dart';
 import 'package:rms_flutter/page/OrderListPage.dart';
+import 'package:rms_flutter/page/UserPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 import 'package:rms_flutter/service/OrderService.dart';
@@ -139,7 +140,23 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Food'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserPage()),
+            );
+          },
+        ),
+        title: Text('Order Food',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+                ),
+        ),
+        centerTitle: true,
         backgroundColor: Colors.indigo,
       ),
       body: Column(

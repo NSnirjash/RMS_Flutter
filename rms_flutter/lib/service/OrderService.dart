@@ -66,6 +66,20 @@ class OrderService {
   }
 
 
+  Future<OrderModel> getOrderByBillId(int billId) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/getOrderByBillId?billId=$billId'),
+    );
+
+    if (response.statusCode == 200) {
+      return OrderModel.fromJson(json.decode(response.body));
+    } else {
+      _handleError(response);
+      throw Exception('Failed to load order');
+    }
+  }
+
+
   Future<void> updateOrderStatus(int id, String status) async {
     final headers = await _getAuthHeaders();
     final url = Uri.parse('$apiUrl/update/$id?status=$status');

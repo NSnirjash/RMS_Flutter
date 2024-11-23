@@ -7,6 +7,7 @@ import 'package:rms_flutter/page/AllTableViewPage.dart';
 import 'package:rms_flutter/page/FoodListPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
 import 'package:rms_flutter/page/OrderListPage.dart';
+import 'package:rms_flutter/page/SettingsPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 
 class AdminPage extends StatefulWidget {
@@ -40,7 +41,11 @@ class _AdminPageState extends State<AdminPage> {
       appBar: AppBar(
         title: Text(
           'Admin Dashboard',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.yellow
+          ),
         ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.teal.shade600,
@@ -50,7 +55,7 @@ class _AdminPageState extends State<AdminPage> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blueGrey.shade100, Colors.teal.shade200],
+            colors: [Colors.blueGrey.shade400, Colors.teal.shade300],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -109,7 +114,7 @@ class _AdminPageState extends State<AdminPage> {
                       context,
                       icon: Icons.table_restaurant,
                       label: 'Table List',
-                      color: Colors.amber,
+                      color: Colors.orangeAccent,
                       onTap: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -131,8 +136,11 @@ class _AdminPageState extends State<AdminPage> {
                       context,
                       icon: Icons.settings,
                       label: 'Settings',
-                      color: Colors.blueGrey,
-                      onTap: () => print("Settings clicked"),
+                      color: Colors.black54,
+                      onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Settingspage()),
+                      ),
                     ),
                   ],
                 ),
@@ -152,7 +160,10 @@ class _AdminPageState extends State<AdminPage> {
                 ),
                 child: Text(
                   'Logout',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],

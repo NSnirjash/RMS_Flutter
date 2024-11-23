@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:rms_flutter/model/Order.dart';
 import 'package:rms_flutter/model/user.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/BillDetailsPage.dart';
 import 'package:rms_flutter/page/UserPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 import 'package:rms_flutter/service/OrderService.dart';
+import 'package:rms_flutter/service/BillService.dart';
 
 class OrderListPage extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class OrderListPage extends StatefulWidget {
 class _OrderListPageState extends State<OrderListPage> {
   final OrderService _orderService = OrderService();
   final AuthService _authService = AuthService();
+  final BillService _billService = BillService();
 
   List<OrderModel> _orderList = [];
   List<User> _waiterList = [];
@@ -88,18 +91,27 @@ class _OrderListPageState extends State<OrderListPage> {
         .showSnackBar(SnackBar(content: Text('Order rejected successfully.')));
   }
 
-  void _navigateBasedOnRole(BuildContext context) {
+  void _createBill(int orderId) async {
     if (_isAdmin()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AdminPage()), // Navigate to AdminPage
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => UserPage()), // Navigate to UserPage
-      );
+      final bill = await _billService.createBill(orderId, _currentUser!.id!);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Bill created successfully with ID: ${bill.id}')));
+      _loadOrderList();
     }
+  }
+
+  void _payBill(int billId) async {
+    final bill = await _billService.payBill(billId);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Bill paid successfully. Status changed to GIVEN.')));
+    _loadOrderList();
+  }
+
+  void _confirmBill(int billId) async {
+    final bill = await _billService.confirmBill(billId, _currentUser!.id!);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Bill confirmed successfully. Status changed to PAID.')));
+    _loadOrderList();
   }
 
   @override
@@ -108,7 +120,19 @@ class _OrderListPageState extends State<OrderListPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => _navigateBasedOnRole(context),
+          onPressed: () {
+            if (_isAdmin()) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AdminPage()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => UserPage()),
+              );
+            }
+          },
         ),
         title: Text('Your Orders',
             style: TextStyle(
@@ -137,7 +161,10 @@ class _OrderListPageState extends State<OrderListPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
                         gradient: LinearGradient(
-                          colors: [Colors.tealAccent.shade100, Colors.lightBlueAccent.shade100],
+                          colors: [
+                            Colors.tealAccent.shade100,
+                            Colors.lightBlueAccent.shade100
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -201,6 +228,21 @@ class _OrderListPageState extends State<OrderListPage> {
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              'Bill Status: ${order.bill != null ? order.bill!.status ?? "N/A" : "No Bill"}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: order.bill != null
+                                    ? (order.bill!.status == 'PAID'
+                                    ? Colors.green
+                                    : (order.bill!.status == 'UNPAID'
+                                    ? Colors.red
+                                    : (order.bill!.status == 'GIVEN' ? Colors.orange : Colors.black)))
+                                    : Colors.black,
+                              ),
+                            ),
                             SizedBox(height: 12.0),
                             if (_isAdmin() && !_isApproved(order))
                               Row(
@@ -255,6 +297,61 @@ class _OrderListPageState extends State<OrderListPage> {
                                 style: TextStyle(
                                   fontStyle: FontStyle.italic,
                                   color: Colors.blueAccent,
+                                ),
+                              ),
+                            SizedBox(height: 12.0),
+                            if (_isAdmin() &&
+                                _isApproved(order) &&
+                                order.bill == null)
+                              ElevatedButton(
+                                onPressed: () => _createBill(order.id!),
+                                child: Text('Create Bill'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.yellow,
+                                  textStyle:
+                                  TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            if (_isAdmin() &&
+                                order.status == 'APPROVED' &&
+                                order.bill != null &&
+                                order.bill!.status == 'GIVEN')
+                              ElevatedButton(
+                                onPressed: () => _confirmBill(order.bill!.id!),
+                                child: Text('Confirm Bill'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.cyan,
+                                  textStyle:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            if (!_isAdmin() &&
+                                order.bill != null &&
+                                order.bill!.status == 'UNPAID')
+                              ElevatedButton(
+                                onPressed: () => _payBill(order.bill!.id!),
+                                child: Text('Pay Bill'),
+                              ),
+                            if (order.bill != null &&
+                                order.bill!.status == 'PAID')
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BillDetailsPage(
+                                          billId: order.bill!.id!),
+                                    ),
+                                  );
+                                },
+                                child: Text('View Bill'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  textStyle:
+                                      TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87
+                                      ),
                                 ),
                               ),
                           ],

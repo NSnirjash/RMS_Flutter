@@ -1,5 +1,6 @@
 
 
+import 'package:rms_flutter/model/Bill.dart';
 import 'package:rms_flutter/model/OrderItem.dart';
 import 'package:rms_flutter/model/user.dart';
 
@@ -12,7 +13,7 @@ class OrderModel {
   User? admin;
   User? staff;
   Null? notes;
-  Null? bill;
+  BillModel? bill;
 
   OrderModel(
       {this.id,
@@ -39,7 +40,7 @@ class OrderModel {
     admin = json['admin'] != null ? new User.fromJson(json['admin']) : null;
     staff = json['staff'] != null ? new User.fromJson(json['staff']) : null;
     notes = json['notes'];
-    bill = json['bill'];
+    bill = json['bill'] != null ? BillModel.fromJson(json['bill']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -60,7 +61,9 @@ class OrderModel {
       data['staff'] = this.staff!.toJson();
     }
     data['notes'] = this.notes;
-    data['bill'] = this.bill;
+    if (this.bill != null) {
+      data['bill'] = this.bill!.toJson();
+    }
     return data;
   }
 }
