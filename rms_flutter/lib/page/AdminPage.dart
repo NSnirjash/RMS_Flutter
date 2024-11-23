@@ -8,6 +8,7 @@ import 'package:rms_flutter/page/FoodListPage.dart';
 import 'package:rms_flutter/page/LoginPage.dart';
 import 'package:rms_flutter/page/OrderListPage.dart';
 import 'package:rms_flutter/page/SettingsPage.dart';
+import 'package:rms_flutter/page/UserListPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 
 class AdminPage extends StatefulWidget {
@@ -65,121 +66,128 @@ class _AdminPageState extends State<AdminPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-            Text(
-            'Welcome, $userName!',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w600,
-              color: Colors.teal.shade800,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              children: [
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.people,
-                  label: 'View Users',
-                  color: Colors.deepPurple,
-                  onTap: () => print("View Users clicked"),
+              Text(
+                'Welcome, $userName!',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.teal.shade800,
                 ),
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.fastfood,
-                  label: 'Food List',
-                  color: Colors.pink,
-                  onTap: () =>
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FoodListPage()),
-                      ),
-                ),
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.fastfood,
-                  label: 'Order List',
-                  color: Colors.red,
-                  onTap: () =>
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => OrderListPage()),
-                      ),
-                ),
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.table_restaurant,
-                  label: 'Table List',
-                  color: Colors.orangeAccent,
-                  onTap: () =>
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AllTableViewPage()),
-                      ),
-                ),
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.table_restaurant,
-                  label: 'View Booking Table',
-                  color: Colors.indigo,
-                  onTap: () =>
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AllTableBookingViewPage()),
-                      ),
-                ),
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.settings,
-                  label: 'Settings',
-                  color: Colors.black54,
-                  onTap: () =>
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Settingspage()),
-                      ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              await AuthService().logout();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
-              padding: EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                textAlign: TextAlign.center,
               ),
-            ),
-            child: Text(
-              'Logout',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              SizedBox(height: 20),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  children: [
+                    _buildDashboardCard(
+                        context,
+                        icon: Icons.people,
+                        label: 'View Users',
+                        color: Colors.deepPurple,
+                        onTap: () =>
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Userlistpage()),
+                            ),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.fastfood,
+                      label: 'Food List',
+                      color: Colors.pink,
+                      onTap: () =>
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FoodListPage()),
+                          ),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.fastfood,
+                      label: 'Order List',
+                      color: Colors.red,
+                      onTap: () =>
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OrderListPage()),
+                          ),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.table_restaurant,
+                      label: 'Table List',
+                      color: Colors.orangeAccent,
+                      onTap: () =>
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AllTableViewPage()),
+                          ),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.table_restaurant,
+                      label: 'View Booking Table',
+                      color: Colors.indigo,
+                      onTap: () =>
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    AllTableBookingViewPage()),
+                          ),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.settings,
+                      label: 'Settings',
+                      color: Colors.black54,
+                      onTap: () =>
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                Settingspage()),
+                          ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  await AuthService().logout();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
 
-          ],
+            ],
+          ),
         ),
-      ),
-    ),);
+      ),);
   }
 
   Widget _buildDashboardCard(BuildContext context,
