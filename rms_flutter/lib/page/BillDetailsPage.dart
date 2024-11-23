@@ -194,19 +194,20 @@ class _BillDetailsPageState extends State<BillDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AdminPage()),
-            );
+            Navigator.pop(context); // Navigate back
           },
         ),
-        title: const Text('Bill Details'),
-        backgroundColor: Colors.blueAccent,
+        title: const Text(
+          'Bill Details',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.teal,
         actions: [
           IconButton(
-            icon: Icon(Icons.print),
+            icon: const Icon(Icons.print, color: Colors.amberAccent, size: 30,),
             onPressed: () async {
               final pdfData = await _generatePdf();
               await Printing.layoutPdf(onLayout: (format) => pdfData);
@@ -220,7 +221,10 @@ class _BillDetailsPageState extends State<BillDetailsPage> {
       )
           : _bill == null
           ? const Center(
-        child: Text('No bill details available'),
+        child: Text(
+          'No bill details available',
+          style: TextStyle(fontSize: 18),
+        ),
       )
           : SingleChildScrollView(
         child: Padding(
@@ -228,12 +232,16 @@ class _BillDetailsPageState extends State<BillDetailsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildSectionHeader('Bill Information', Icons.receipt),
               _buildBillInfo(),
               const SizedBox(height: 16),
+              _buildSectionHeader('Order Details', Icons.shopping_cart),
               _buildOrderDetails(),
               const SizedBox(height: 16),
+              _buildSectionHeader('User Details', Icons.person),
               _buildUserDetails(),
               const SizedBox(height: 16),
+              _buildSectionHeader('Admin Details', Icons.admin_panel_settings),
               _buildAdminDetails(),
             ],
           ),
@@ -242,108 +250,136 @@ class _BillDetailsPageState extends State<BillDetailsPage> {
     );
   }
 
-  Widget _buildBillInfo() {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Bill Information',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text('Bill ID: ${_bill?.id ?? 'N/A'}'),
-            Text('Total Amount: \$${_bill?.totalAmount?.toStringAsFixed(2) ?? '0.00'}'),
-            Text('Status: ${_bill?.status ?? 'Unknown'}'),
-            Text('Payment Method: ${_bill?.paymentMethod ?? 'N/A'}'),
-            Text('Bill Date: ${_bill?.billDate ?? 'N/A'}'),
-          ],
+  Widget _buildSectionHeader(String title, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.teal, size: 24),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.teal,
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildBillInfo() {
+    return _buildCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDetailRow('Bill ID', _bill?.id?.toString() ?? 'N/A'),
+          _buildDetailRow('Total Amount', '\$${_bill?.totalAmount?.toStringAsFixed(2) ?? '0.00'}'),
+          _buildDetailRow('Status', _bill?.status?.toString() ?? 'Unknown'),
+          _buildDetailRow('Payment Method', _bill?.paymentMethod?.toString() ?? 'N/A'),
+          _buildDetailRow('Bill Date', _bill?.billDate?.toString() ?? 'N/A'),
+        ],
       ),
     );
   }
 
   Widget _buildOrderDetails() {
-    return _order == null
-        ? const Text('No order details available.')
-        : Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Order Details',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text('Order ID: ${_order?.id ?? 'N/A'}'),
-            Text('Total Price: \$${_order?.totalPrice?.toStringAsFixed(2) ?? '0.00'}'),
-            const SizedBox(height: 8),
-            const Text('Items:'),
-            _order?.orderItems != null && _order!.orderItems!.isNotEmpty
-                ? Column(
-              children: _order!.orderItems!.map((item) {
-                return ListTile(
-                  title: Text(item.food?.name ?? 'Unknown'),
-                  subtitle: Text(
-                    'Quantity: ${item.quantity ?? 0}, Price: \$${item.food?.price?.toStringAsFixed(2) ?? '0.00'}',
-                  ),
-                  trailing: Text(
-                    'Total: \$${((item.quantity ?? 0) * (item.food?.price ?? 0)).toStringAsFixed(2)}',
-                    style: const TextStyle(color: Colors.green),
-                  ),
-                );
-              }).toList(),
-            )
-                : const Text('No items in the order.'),
-          ],
-        ),
+    if (_order == null) {
+      return const Text('No order details available.');
+    }
+    return _buildCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDetailRow('Order ID', _order?.id?.toString() ?? 'N/A'),
+          _buildDetailRow('Total Price', '\$${_order?.totalPrice?.toStringAsFixed(2) ?? '0.00'}'),
+          const SizedBox(height: 8),
+          const Text('Items:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+          const SizedBox(height: 8),
+          ...?_order?.orderItems?.map((item) {
+            return Card(
+              elevation: 2,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text(item.food?.name?.toString() ?? 'Unknown'),
+                subtitle: Text(
+                  'Quantity: ${item.quantity?.toString() ?? '0'}, Price: \$${item.food?.price?.toStringAsFixed(2) ?? '0.00'}',
+                ),
+                trailing: Text(
+                  'Total: \$${((item.quantity ?? 0) * (item.food?.price ?? 0)).toStringAsFixed(2)}',
+                  style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+              ),
+            );
+          }).toList(),
+        ],
       ),
     );
   }
 
+
   Widget _buildUserDetails() {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'User Details',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text('Paid By: ${_bill?.paidBy?.name ?? 'N/A'}'),
-          ],
-        ),
+    return _buildCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDetailRow('Paid By', _bill?.paidBy?.name ?? 'N/A'),
+        ],
       ),
     );
   }
 
   Widget _buildAdminDetails() {
-    return Card(
-      elevation: 4,
+    return _buildCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDetailRow('Received By', _bill?.receivedBy?.name ?? 'N/A'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard({required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          colors: [Colors.lightBlue.shade100, Colors.teal.shade200],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 4),
+            blurRadius: 6,
+          ),
+        ],
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Admin Details',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text('Received By: ${_bill?.receivedBy?.name ?? 'N/A'}'),
-          ],
-        ),
+        child: child,
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          Text(
+            value,
+            style: const TextStyle(color: Colors.black),
+          ),
+        ],
       ),
     );
   }
 }
+
