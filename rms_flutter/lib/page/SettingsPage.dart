@@ -1,9 +1,18 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:rms_flutter/page/AboutPage.dart';
+import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/HelpSupportPage.dart';
+import 'package:rms_flutter/page/LanguagePage.dart';
+import 'package:rms_flutter/page/NotificationPage.dart';
+import 'package:rms_flutter/page/PrivacySecurityPage.dart';
+import 'package:rms_flutter/page/ThemPage.dart';
+import 'package:rms_flutter/page/UserPage.dart';
+import 'package:rms_flutter/page/UserProfilePage.dart';
+import 'package:rms_flutter/service/AuthService.dart';
 
 class Settingspage extends StatelessWidget {
-  const Settingspage({super.key});
+  Settingspage({super.key});
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +25,38 @@ class Settingspage extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
         foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () async {
+            // Fetch the current user
+            final user = await _authService.getCurrentUser();
+
+            // Check if the user is null before accessing the role
+            if (user == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('User not found! Please log in again.')),
+              );
+              return;
+            }
+            // Navigate based on the user's role
+            if (user.role == 'ADMIN') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AdminPage()),
+              );
+            } else if (user.role == 'USER') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => UserPage()),
+              );
+            } else {
+              // Handle unexpected roles
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Unknown user role!')),
+              );
+            }
+          },
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -34,7 +75,10 @@ class Settingspage extends StatelessWidget {
               title: 'Profile',
               subtitle: 'View and edit your profile',
               color: Colors.blue,
-              onTap: () => print('Navigate to Profile Settings'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UserProfilePage()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -42,7 +86,10 @@ class Settingspage extends StatelessWidget {
               title: 'Notifications',
               subtitle: 'Manage notification preferences',
               color: Colors.orange,
-              onTap: () => print('Navigate to Notification Settings'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationPage()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -50,7 +97,10 @@ class Settingspage extends StatelessWidget {
               title: 'Theme',
               subtitle: 'Customize app appearance',
               color: Colors.pink,
-              onTap: () => print('Navigate to Theme Settings'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ThemePage()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -58,7 +108,10 @@ class Settingspage extends StatelessWidget {
               title: 'Privacy & Security',
               subtitle: 'Adjust your privacy settings',
               color: Colors.teal,
-              onTap: () => print('Navigate to Privacy Settings'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PrivacySecurityPage()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -66,7 +119,10 @@ class Settingspage extends StatelessWidget {
               title: 'Language',
               subtitle: 'Choose your preferred language',
               color: Colors.purple,
-              onTap: () => print('Navigate to Language Settings'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LanguagePage()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -74,7 +130,10 @@ class Settingspage extends StatelessWidget {
               title: 'About',
               subtitle: 'Learn more about this app',
               color: Colors.green,
-              onTap: () => print('Navigate to About Page'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutPage()),
+              ),
             ),
             _buildSettingsCard(
               context,
@@ -82,7 +141,10 @@ class Settingspage extends StatelessWidget {
               title: 'Help & Support',
               subtitle: 'Get help or contact support',
               color: Colors.redAccent,
-              onTap: () => print('Navigate to Help Page'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HelpSupportPage()),
+              ),
             ),
           ],
         ),
