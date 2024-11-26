@@ -6,8 +6,8 @@ import 'package:rms_flutter/page/UserPage.dart';
 import 'package:rms_flutter/service/AuthService.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final TextEditingController email = TextEditingController()..text='shahriyarnirjash1996@gmail.com';
+  final TextEditingController password = TextEditingController()..text='123456789';
   final storage = FlutterSecureStorage();
   AuthService authService = AuthService();
 

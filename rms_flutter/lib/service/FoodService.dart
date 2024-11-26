@@ -63,4 +63,38 @@ class FoodService{
     }
   }
 
+  Future<void> editFood(Food food, int id) async {
+    final response = await http.put(
+        Uri.parse('$apiUrl2/update/$id'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(food.toJson()),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update food');
+    }
+  }
+
+  Future<bool> deleteFood(int foodId) async {
+    final token = await authService.getToken();
+    final headers = {'Authorization': 'Bearer $token'};
+
+    try {
+      final response = await _dio.delete(
+        '${apiUrl2}delete/$foodId',
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode == 200) {
+        print('Food deleted successfully');
+        return true;
+      } else {
+        print('Error deleting food: ${response.statusCode}');
+        return false;
+      }
+    } on DioError catch (e) {
+      print('Error deleting food: ${e.message}');
+      return false;
+    }
+  }
+
 }

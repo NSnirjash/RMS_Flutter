@@ -1,9 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:rms_flutter/model/food.dart';
 import 'package:rms_flutter/page/AddFoodPage.dart';
 import 'package:rms_flutter/page/AdminPage.dart';
+import 'package:rms_flutter/page/EditFoodPage.dart';
 import 'package:rms_flutter/service/FoodService.dart';
 
 class FoodListPage extends StatefulWidget {
@@ -29,26 +28,8 @@ class _FoodListPageState extends State<FoodListPage> {
     });
   }
 
-  // Function to delete a food item
-  // Future<void> _deleteFood(int foodId) async {
-  //   try {
-  //     await FoodService().deleteFood(foodId);
-  //     setState(() {
-  //       futureFoods = FoodService().fetchFoods(); // Refresh the list
-  //     });
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Food item deleted successfully!')),
-  //     );
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error deleting food item: $e')),
-  //     );
-  //   }
-  // }
-
   // Function to navigate to the edit food page (replace with your edit page logic)
   void _editFood(Food food) {
-    // Navigate to your edit food page
     print('Edit food: ${food.name}');
   }
 
@@ -72,10 +53,9 @@ class _FoodListPageState extends State<FoodListPage> {
         centerTitle: true,
         backgroundColor: Colors.deepOrangeAccent,
         actions: [
-          // Refresh icon
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: _refreshFoodList,  // Trigger the refresh when pressed
+            onPressed: _refreshFoodList,
           ),
         ],
       ),
@@ -104,7 +84,7 @@ class _FoodListPageState extends State<FoodListPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Image with rounded corners and shadow
+                      // Image with rounded corners
                       ClipRRect(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(15),
@@ -135,13 +115,41 @@ class _FoodListPageState extends State<FoodListPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              food.name ?? 'Unnamed Food',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepOrange,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    food.name ?? 'Unnamed Food',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.deepOrange,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.edit, color: Colors.blue),
+                                      onPressed: () {
+                                        // Navigate to EditFoodPage and pass the food item
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EditFoodPage(food: food),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () => (), // Add delete functionality here
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                             SizedBox(height: 5),
                             Text(
@@ -153,26 +161,20 @@ class _FoodListPageState extends State<FoodListPage> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              'Available: ${food.available}', // Added "Available" text
+                              'Price: \$${(food.price ?? 0.00).toStringAsFixed(2)}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Available: ${food.available}',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.green,
                                 fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.blue),
-                                  onPressed: () => _editFood(food),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () => (),       //_deleteFood(food.id!)
-                                ),
-                              ],
                             ),
                           ],
                         ),
