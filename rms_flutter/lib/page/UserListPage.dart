@@ -11,7 +11,7 @@ class Userlistpage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Settings',
+          'User List',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.deepPurple,
@@ -51,7 +51,7 @@ class Userlistpage extends StatelessWidget {
             ),
             _buildSettingsCard(
               context,
-              icon: Icons.notifications,
+              icon: Icons.person,
               title: 'All Waiter List',
               subtitle: 'Manage notification preferences',
               color: Colors.orange,

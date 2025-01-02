@@ -63,17 +63,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
                     child: user.image == null || user.image!.isEmpty
-                        ? const Icon(
-                            Icons.person,
-                            size: 100,
-                            color: Colors.deepPurpleAccent,
-                          )
+                        ? Image.network(
+                      'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png',
+                      height: 200,
+                      width: 200,
+                      fit: BoxFit.cover,
+                    )
                         : Image.network(
-                            user.image!,
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.cover,
-                          ),
+                      user.image!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),

@@ -25,7 +25,7 @@ class _AllWaiterListPageState extends State<AllWaiterListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'All Customer List',
+          'All Waiter List',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         backgroundColor: Colors.indigoAccent,
